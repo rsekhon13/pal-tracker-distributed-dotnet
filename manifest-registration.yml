@@ -1,0 +1,12 @@
+---
+applications:
+- name: tracker-registration
+  buildpack: https://github.com/cloudfoundry/dotnet-core-buildpack#v1.0.31
+  instances: 1
+  memory: 256M
+  host: registration-pal-INITIALS
+  path: Applications/RegistrationServer/bin/Release/netcoreapp2.0/publish
+  env:
+    REGISTRATION_SERVER_ENDPOINT: http://FILL_ME_IN/
+  services:
+  - tracker-registration-database
