@@ -6,7 +6,6 @@ applications:
   memory: 256M
   host: registration-pal-INITIALS
   path: Applications/RegistrationServer/bin/Release/netcoreapp2.0/publish
-  env:
-    REGISTRATION_SERVER_ENDPOINT: http://FILL_ME_IN/
   services:
   - tracker-registration-database
+  - tracker-service-registry

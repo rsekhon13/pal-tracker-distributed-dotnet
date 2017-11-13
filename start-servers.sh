@@ -15,7 +15,6 @@ function startServer() {
     cd $appDir
     
     export Logging__LogLevel__Default=Debug
-    export REGISTRATION_SERVER_ENDPOINT=http://localhost:8883/
     export VCAP_SERVICES=${vcap_services}
     
     dotnet run --server.urls "http://*:${port}"
