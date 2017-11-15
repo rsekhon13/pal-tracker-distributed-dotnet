@@ -4,7 +4,7 @@ applications:
   buildpack: https://github.com/cloudfoundry/dotnet-core-buildpack#v1.0.31
   instances: 1
   memory: 256M
-  host: backlog-pal-INITIALS
+  host: backlog-pal-sartan
   path: Applications/BacklogServer/bin/Release/netcoreapp2.0/publish
   env:
     GRANT_TYPE: client_credentials
