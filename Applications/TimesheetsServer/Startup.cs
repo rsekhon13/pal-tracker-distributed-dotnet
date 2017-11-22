@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pivotal.Discovery.Client;
+using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Extensions.Configuration;
 using Timesheets;
 
@@ -31,6 +32,7 @@ namespace TimesheetsServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDiscoveryClient(Configuration);
+            services.AddHystrixMetricsStream(Configuration);
 
             // Add framework services.
             services.AddMvc();
@@ -47,7 +49,9 @@ namespace TimesheetsServer
                     BaseAddress = new Uri(Configuration.GetValue<string>("REGISTRATION_SERVER_ENDPOINT"))
                 };
 
-                return new ProjectClient(httpClient);
+                var logger = sp.GetService<ILogger<ProjectClient>>();
+                
+                return new ProjectClient(httpClient, logger);
             });
         }
 
@@ -59,6 +63,8 @@ namespace TimesheetsServer
 
             app.UseMvc();
             app.UseDiscoveryClient();
+            app.UseHystrixMetricsStream();
+            app.UseHystrixRequestContext();
         }
     }
 }
