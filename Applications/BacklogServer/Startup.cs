@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Net.Http;
+using AuthDisabler;
 using Backlog;
 using DatabaseSupport;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pivotal.Discovery.Client;
 using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Extensions.Configuration;
+using Steeltoe.Security.Authentication.CloudFoundry;
 
 namespace BacklogServer
 {
@@ -50,9 +54,22 @@ namespace BacklogServer
                 };
 
                 var logger = sp.GetService<ILogger<ProjectClient>>();
-                
-                return new ProjectClient(httpClient, logger);
+                var contextAccessor = sp.GetService<HttpContextAccessor>();
+
+                return new ProjectClient(
+                    httpClient, logger,
+                    () => contextAccessor.HttpContext.Authentication.GetTokenAsync("access_token")
+                );
             });
+            
+            services.AddCloudFoundryJwtAuthentication(Configuration);
+            if (Configuration.GetValue("DISABLE_AUTH", false))
+            {
+                services.DisableClaimsVerification();
+            }
+            services.AddAuthorization(options =>
+                options.AddPolicy("pal-dotnet", policy => policy.RequireClaim("scope", "pal-dotnet")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +78,7 @@ namespace BacklogServer
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseCloudFoundryJwtAuthentication();
             app.UseMvc();
             app.UseDiscoveryClient();
             app.UseHystrixMetricsStream();
