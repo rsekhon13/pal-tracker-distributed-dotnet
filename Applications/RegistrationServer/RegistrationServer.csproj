@@ -19,5 +19,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.2" />
     <PackageReference Include="Pivotal.Discovery.Client" Version="1.1.0" />
     <PackageReference Include="SteelToe.Security.Authentication.CloudFoundry" Version="1.1.0" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" Version= "1.1.0"/>
   </ItemGroup>
 </Project>

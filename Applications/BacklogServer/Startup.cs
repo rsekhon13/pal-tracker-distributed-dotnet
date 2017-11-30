@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pivotal.Discovery.Client;
 using Steeltoe.CircuitBreaker.Hystrix;
-using Steeltoe.Extensions.Configuration;
+using Pivotal.Extensions.Configuration;
 using Steeltoe.Security.Authentication.CloudFoundry;
 
 namespace BacklogServer
@@ -25,7 +25,7 @@ namespace BacklogServer
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddCloudFoundry()
+                .AddConfigServer(env)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }

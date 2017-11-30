@@ -21,5 +21,6 @@
     <PackageReference Include="Pivotal.Discovery.Client" Version="1.1.0" />
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
     <PackageReference Include="SteelToe.Security.Authentication.CloudFoundry" Version="1.1.0" />
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" Version= "1.1.0"/>
   </ItemGroup>
 </Project>

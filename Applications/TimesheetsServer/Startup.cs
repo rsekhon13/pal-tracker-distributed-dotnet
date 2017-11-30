@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using AuthDisabler;
 using DatabaseSupport;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pivotal.Discovery.Client;
 using Steeltoe.CircuitBreaker.Hystrix;
-using Steeltoe.Extensions.Configuration;
+using Pivotal.Extensions.Configuration;
 using Steeltoe.Security.Authentication.CloudFoundry;
 using Timesheets;
 
@@ -28,7 +25,7 @@ namespace TimesheetsServer
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddCloudFoundry()
+                .AddConfigServer(env)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
